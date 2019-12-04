@@ -4,31 +4,24 @@ function buildMetadata(sample) {
   // Use `d3.json` to fetch the metadata for a sample
   // Use d3 to select the panel with id of `#sample-metadata`
   var defaultURL = `/metadata/${sample}`;
-  d3.json(defaultURL).then(function((data) => {
-  var PANEL = d3.select("#sample-metadata");
+  d3.json(defaultURL).then((data) => {
+    var PANEL = d3.select("#sample-metadata");
 
-// Use `.html("") to clear any existing metadata
+  // Use `.html("") to clear any existing metadata
 
-  PANEL.html("");
+    PANEL.html("");
 
-  // Use `Object.entries` to add each key and value pair to the panel
-  // Hint: Inside the loop, you will need to use d3 to append new
-  // tags for each key-value in the metadata.
+    // Use `Object.entries` to add each key and value pair to the panel
+    // Hint: Inside the loop, you will need to use d3 to append new
+    // tags for each key-value in the metadata.
 
-  stuff = Object.entries(data).forEach([key, value]) => {
-    PANEL.append("h6").text(`${key}; ${value}`);
-
-    console.log(stuff)
-  
+    Object.entries(data).forEach(([key, value]) => {
+      PANEL.append("#selDataset").text(`${key}; ${value}`);
     }); 
-  }
+  });
   // BONUS: Build the Gauge Chart
   // buildGauge(data.WFREQ);
 }
-  
-
-  
-});
 
 function buildCharts(sample) {
 
@@ -40,36 +33,38 @@ function buildCharts(sample) {
     // HINT: You will need to use slice() to grab the top 10 sample_values,
     // otu_ids, and labels (10 each).
 
-    function getData() {
+    
       var sampleurl = `/samples/${sample}`;
       d3.json(sampleurl).then(function(data) {
+        var sample_values, otu_ids, otu_labels;
     
         // Grab values from the response json object to build the plots
-        var sample_values = data.dataset.sample_values;
-        var otu_ids = data.dataset.otu_ids;
-        var otu_labels  = data.dataset.otu_labels;
+        sample_values = data.sample_values;
+        otu_ids = data.otu_ids;
+        otu_labels  = data.otu_labels;
+
+        var trace1 = {
+          type: "pie",
+          name: otu_ids,
+          values: sample_values,
+          labels: otu_labels,
+          };
+    
+        var data = [trace1];
+    
+        // var layout = 
+    
+        Plotly.newPlot("pie", data);
+
+
       });
     }
   
-      getData();
+      
   
-      var trace1 = {
-        type: "pie",
-        name: name,
-        values: dates,
-        labels: closingPrices,
-        };
+
   
-      var data = [trace1];
-  
-      // var layout = 
-  
-      Plotly.newPlot("pie", data);
-  
-    };
-  
-  buildPlot();
-}
+  //buildPlot();
 
 function init() {
   // Grab a reference to the dropdown select element
